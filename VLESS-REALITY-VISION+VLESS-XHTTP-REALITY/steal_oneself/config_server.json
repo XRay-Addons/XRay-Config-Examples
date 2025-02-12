@@ -1,0 +1,92 @@
+{
+    "log": {
+      "loglevel": "warning"
+    },
+  
+    "inbounds": [
+  
+      // tcp reality with vision inbound
+      {
+        "tag": "reality-in",
+        "listen": "0.0.0.0",
+        "port": 443,
+        "protocol": "vless",
+        "settings": {
+          "clients": [
+            {
+              "id": "stepka",
+              "email": "stepka@email",
+              "flow": "xtls-rprx-vision"
+            }
+          ],
+          "fallbacks": [
+            {
+              "dest": "/dev/shm/xray_nginx_xhttp.sock", // nginx proxy input
+              "xver": 1
+            }
+          ],
+          "decryption": "none"
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "security": "reality",
+          "realitySettings": {
+            "xver": 1,
+            "target": "/dev/shm/xray_nginx_https.sock", // nginx with example.com
+            "serverNames": ["example.com"],
+            "privateKey": "your_private_key",
+            "shortIds": [""]
+          }
+        },
+        "sniffing": {
+          "enabled": true,
+          "destOverride": ["http", "tls", "quic"],
+          "metadataOnly": false,
+          "routeOnly": true
+        }
+      },
+  
+      // xhttp inbound
+      {
+        "tag": "xhttp_in",
+        "listen": "/dev/shm/xray_xhttp.sock,0666", // nginx proxy output
+        "protocol": "vless",
+        "settings": {
+          "clients": [
+            {
+              "id": "stepka",
+              "email": "stepka@email"
+            }
+          ],
+          "decryption": "none"
+        },
+        "streamSettings": {
+          "network": "xhttp",
+          "xhttpSettings": {
+            "mode": "stream-one",
+            "path": "/your_xhttp_path"
+          },
+          "sockopt": {
+            "acceptProxyProtocol": false
+          }
+        },
+        "sniffing": {
+          "enabled": true,
+          "destOverride": ["http", "tls", "quic"],
+          "metadataOnly": false,
+          "routeOnly": true
+        }
+      }
+    ],
+  
+    "outbounds": [
+      {
+          "protocol": "freedom",
+          "tag": "direct"
+      },
+      {
+          "protocol": "blackhole",
+          "tag": "block"
+      }
+    ]
+  }
