@@ -7,4 +7,4 @@
 эти конфиги на свой страх и риск.
 
 ___
-![footer](footer.svg)
+![footer](./assets/footer.svg)
