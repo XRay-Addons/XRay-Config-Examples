@@ -6,5 +6,5 @@
 В правильности того, что я делаю, я не уверен, используйте 
 эти конфиги на свой страх и риск.
 
-___
+##
 ![footer](https://raw.githubusercontent.com/XRay-Addons/XRay-Config-Examples/refs/heads/main/assets/footer.svg)
